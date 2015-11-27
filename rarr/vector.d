@@ -2,6 +2,9 @@ module vector;
 
 import std.math : sqrt, abs, round;
 import std.algorithm.iteration : each;
+import std.file;
+import std.string;
+import std.conv;
 
 debug = v;
 debug(v) import std.stdio;
@@ -39,8 +42,42 @@ class vector(T)
         debug(v) writeln("constr ", this.m_data);
     }
 
-    /// construct new vector through caaling class as a function
+    /// construct new vector through calling class as a function
     static auto opCall(T[] data) { return new vector!T(data); }
+
+
+    /// construct new vector from file filename
+    static auto opCall(string filename)
+    {
+        assert(exists(filename));
+        string[] lines = splitLines(readText(filename));
+        debug(v) writeln(lines);
+        assert(lines.length == 1);
+        return new vector!T(array_from_line(lines[0]));
+    }
+
+    static auto array_from_line(ref string line)
+    {
+        T[] new_data;
+        string buf;
+        debug(v) writeln("line: ",line);
+        foreach(i; 0.. line.length)
+        {
+            switch(line[i])
+            {
+                case ';':
+                    //line[i] = ' ';
+                    new_data ~= to!T(buf);
+                    buf.length = 0;
+                    break;
+                default:
+                    buf ~= line[i];
+            }
+        }
+        new_data ~= to!T(buf);
+        debug(v) writeln("parsed array ", new_data);
+        return new_data;
+    }
 
 
     /// cast to array returns inner array

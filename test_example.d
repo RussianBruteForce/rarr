@@ -28,5 +28,15 @@ int main(string[] args)
     vn ~= [9,8,7];
     vn ~= vector!int([1,2,3]);
     writeln(cast(int[])(vn));
+
+
+    auto mn = matrix!int([[1,2],[3,4]]);
+    writeln(mn.norm(mn.norm_t.cubic));
+    writeln(mn.norm(mn.norm_t.octo));
+    auto vm = mn*vector!int([5,6]);
+    writeln(cast(int[])(vm));
+
+    auto vt1 = vector!int("v1");
+    auto mt1 = matrix!int("m1");
 	return 0;
 }

@@ -3,24 +3,31 @@
 
 1448345319 source:/home/asmodeus/dev/rarr/rarr_vector.d
 
-1448593712 source:/home/asmodeus/dev/rarr/test_example.d
+1448646863 source:/home/asmodeus/dev/rarr/test_example.d
 	<std/stdio.d>
 	<std/typecons.d>
 	<rarr.d>
 
-1448601287 source:/home/asmodeus/dev/rarr/rarr/matrix.d
+1448646758 source:/home/asmodeus/dev/rarr/rarr/matrix.d
+	<std/file.d>
+	<std/string.d>
+	<std/conv.d>
+	<rarr/vector.d>
 	<std/stdio.d>
 
-1448601229 source:/home/asmodeus/dev/rarr/rarr/vector.d
+1448646868 source:/home/asmodeus/dev/rarr/rarr/vector.d
+	<std/file.d>
+	<std/string.d>
+	<std/conv.d>
 	<std/stdio.d>
 
 1448347926 source:/home/asmodeus/dev/rarr/rarr.d
 	<rarr/vector.d>
 	<rarr/matrix.d>
 
-1448601229 /home/asmodeus/dev/rarr/rarr/vector.d
+1448646868 /home/asmodeus/dev/rarr/rarr/vector.d
 
-1448601287 /home/asmodeus/dev/rarr/rarr/matrix.d
+1448646758 /home/asmodeus/dev/rarr/rarr/matrix.d
 
 1448599987 source:/home/asmodeus/dev/rarr/rarr/package.d
 	<rarr/vector.d>
