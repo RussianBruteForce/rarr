@@ -42,32 +42,9 @@ class matrix(T)
         assert(exists(filename));
         T[][] new_data;
         string[] lines = splitLines(readText(filename));
-        lines.each!((ref string a) => new_data ~= array_from_line(a));
+        lines.each!((ref string a) => new_data ~= vector!T.array_from_line(a));
 
         return new matrix!T(new_data);
-    }
-
-    static auto array_from_line(ref string line)
-    {
-        T[] new_data;
-        string buf;
-        debug(v) writeln("line: ",line);
-        foreach(i; 0.. line.length)
-        {
-            switch(line[i])
-            {
-                case ';':
-                    //line[i] = ' ';
-                    new_data ~= to!T(buf);
-                    buf.length = 0;
-                    break;
-                default:
-                    buf ~= line[i];
-            }
-        }
-        new_data ~= to!T(buf);
-        debug(v) writeln("parsed array ", new_data);
-        return new_data;
     }
 
     auto t()
