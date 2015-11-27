@@ -5,6 +5,7 @@ import std.algorithm.iteration : each;
 import std.file;
 import std.string;
 import std.conv;
+import std.random;
 
 debug = v;
 debug(v) import std.stdio;
@@ -16,11 +17,11 @@ debug(v) import std.stdio;
 class vector(T)
 {
     ///getter and setter for length of inner array
-    @property size_t size() { return m_data.length; }
+    @property size_t size() { return this.m_data.length; }
     /// ditto
-    @property size_t size(size_t l) { return m_data.length = l; }
+    @property size_t size(size_t l) { return this.m_data.length = l; }
     /// pointer to inner array
-    @property T[] data() { return m_data; };
+    @property T[] data() { return this.m_data; };
 
     /// stored data type
     alias type = T;
@@ -45,7 +46,6 @@ class vector(T)
     /// construct new vector through calling class as a function
     static auto opCall(T[] data) { return new vector!T(data); }
 
-
     /// construct new vector from file filename
     static auto opCall(string filename)
     {
@@ -54,6 +54,28 @@ class vector(T)
         debug(v) writeln(lines);
         assert(lines.length == 1);
         return new vector!T(array_from_line(lines[0]));
+    }
+
+    /// construct new vector of size filled with 0
+    static auto opCall(size_t size) {
+        auto v = new vector!T([0]);
+        v.size = size;
+        return v;
+    }
+
+    /**
+        fill vector with random data
+        Params:
+            _a =     min
+            _b =     max
+    */
+    auto randomize(T _a = T.min, T _b = T.max)
+    {
+        //debug(v) writefln("min %d max %d", T.min, T.max);
+        assert(_a < _b);
+        auto gen = Random(unpredictableSeed);
+        this.m_data.each!((ref a) => a = uniform(_a, _b, gen));
+        return this;
     }
 
     static auto array_from_line(ref string line)
@@ -78,6 +100,7 @@ class vector(T)
         debug(v) writeln("parsed array ", new_data);
         return new_data;
     }
+
 
 
     /// cast to array returns inner array

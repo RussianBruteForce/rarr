@@ -38,5 +38,11 @@ int main(string[] args)
 
     auto vt1 = vector!int("v1");
     auto mt1 = matrix!int("m1");
+
+
+    auto vr1 = vector!int(5);
+    writeln(cast(int[])(vr1.randomize()));
+    auto mr1 = matrix!int(5);
+    writeln(cast(int[][])(mr1.randomize()));
 	return 0;
 }

@@ -4,6 +4,7 @@ import std.algorithm.iteration : each;
 import std.file;
 import std.string;
 import std.conv;
+import std.random;
 
 import rarr.vector;
 
@@ -11,10 +12,20 @@ debug = m;
 
 debug(m) import std.stdio;
 
+
+/++
+    matrix: class for math square matrix representation
++/
+
 class matrix(T)
 {
     @property size_t size() { return m_data.length; }
-    @property T[][] data() {return m_data;};
+    @property size_t size(size_t size) {
+        this.m_data.length = size;
+        this.m_data.each!((ref a) => a.length = size);
+        return this.m_data.length;
+    }
+    @property T[][] data() {return this.m_data;};
 
     alias type = T;
 
@@ -45,6 +56,28 @@ class matrix(T)
         lines.each!((ref string a) => new_data ~= vector!T.array_from_line(a));
 
         return new matrix!T(new_data);
+    }
+
+    /// construct new matrix of size filled with 0
+    static auto opCall(size_t size) {
+        auto v = new matrix!T([[0]]);
+        v.size = size;
+        return v;
+    }
+
+    /**
+        fill matrix with random data
+        Params:
+            _a =     min
+            _b =     max
+    */
+    auto randomize(T _a = T.min, T _b = T.max)
+    {
+        assert(_a < _b);
+        auto gen = Random(unpredictableSeed);
+        auto rv(ref T[] x) { x.each!((ref a) => a = uniform(_a, _b, gen)); };
+        this.m_data.each!((ref a) => rv(a));
+        return this;
     }
 
     auto t()
