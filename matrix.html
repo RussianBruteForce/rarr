@@ -24,12 +24,22 @@ class for math square <u>matrix</u> representation<br><br>
 </dd>
 </dl>
 </dd>
-<dt><big><a name="matrix.opCall"></a>static auto <u>opCall</u>(string <i>filename</i>);
+<dt><big><a name="matrix.this"></a>this(T[][] <i>data</i>);
+</big></dt>
+<dd>construct matrix from <i>data</i><br><br>
+
+</dd>
+<dt><big><a name="matrix.opCall"></a>auto <u>opCall</u>(M)(M[][] <i>data</i>);
+</big></dt>
+<dd>construct new matrix through calling class as a function<br><br>
+
+</dd>
+<dt><big><a name="matrix.opCall.2"></a>static auto <u>opCall</u>(string <i>filename</i>);
 </big></dt>
 <dd>construct new matrix from file <i>filename</i><br><br>
 
 </dd>
-<dt><big><a name="matrix.opCall.2"></a>static auto <u>opCall</u>(size_t <i>size</i>);
+<dt><big><a name="matrix.opCall.3"></a>static auto <u>opCall</u>(size_t <i>size</i>);
 </big></dt>
 <dd>construct new matrix of <i>size</i> filled with 0<br><br>
 
@@ -46,9 +56,56 @@ class for math square <u>matrix</u> representation<br><br>
 </table><br>
 
 </dd>
+<dt><big><a name="matrix.t"></a>auto <u>t</u>();
+</big></dt>
+<dd>returns <i>NEW</i> transposed matrix<br><br>
+
+</dd>
+<dt><big><a name="matrix.opCast"></a>auto <u>opCast</u>(type)() if (typeid(type) == typeid(T[][]));
+</big></dt>
+<dd>cast to T[][] returns inner array<br><br>
+
+</dd>
 <dt><big><a name="matrix.norm"></a>auto <u>norm</u>(norm_t <i>type</i>);
 </big></dt>
 <dd>returns <u>norm</u> of <i>type</i> <i>type</i><br><br>
+
+</dd>
+<dt><big><a name="matrix.opIndex"></a>auto <u>opIndex</u>(size_t <i>row</i>, size_t <i>col</i>);
+<br><a name="matrix.opIndexAssign"></a>auto <u>opIndexAssign</u>(T <i>value</i>, size_t <i>row</i>, size_t <i>col</i>);
+</big></dt>
+<dd>getter and setter through index<br><br>
+
+</dd>
+<dt><big><a name="matrix.opBinary"></a>auto <u>opBinary</u>(string op)(T <i>rhs</i>);
+</big></dt>
+<dd>apply op on each matrix element<br><br>
+
+</dd>
+<dt><big><a name="matrix.opBinary.2"></a>auto <u>opBinary</u>(string op)(matrix <i>rhs</i>) if (op == "+" || op == "-");
+</big></dt>
+<dd>add and subs ops between matrix of same size<br><br>
+
+</dd>
+<dt><big><a name="matrix.opBinary.3"></a>auto <u>opBinary</u>(string op)(matrix <i>rhs</i>) if (op == "*");
+</big></dt>
+<dd>multiplication of same size matrix<br><br>
+
+</dd>
+<dt><big><a name="matrix.opBinary.4"></a>auto <u>opBinary</u>(string op)(vector!T <i>rhs</i>) if (op == "*");
+</big></dt>
+<dd>multiplication on vector of same size<br><br>
+
+</dd>
+<dt><big><a name="matrix.opOpAssign"></a>auto <u>opOpAssign</u>(string op)(T <i>rhs</i>);
+<br>auto <u>opOpAssign</u>(string op)(matrix <i>rhs</i>) if (op == "+" || op == "-");
+</big></dt>
+<dd>assign op aplly on each element<br><br>
+
+</dd>
+<dt><big><a name="matrix.opOpAssign.2"></a>auto <u>opOpAssign</u>(string op)(matrix <i>rhs</i>) if (op == "*");
+</big></dt>
+<dd>assign multiplication<br><br>
 
 </dd>
 </dl>
