@@ -46,14 +46,33 @@ class vector(T)
     /// construct new vector through calling class as a function
     static auto opCall(T[] data) { return new vector!T(data); }
 
-    /// construct new vector from file filename
-    static auto opCall(string filename)
+    /**
+        construct new vector from file
+        Param:
+            filename =  file name
+            separator = number separator
+    */
+    static auto opCall(string filename, char separator = ';')
     {
         assert(exists(filename));
         string[] lines = splitLines(readText(filename));
         debug(v) writeln(lines);
         assert(lines.length == 1);
-        return new vector!T(array_from_line(lines[0]));
+        return new vector!T(array_from_line(lines[0], separator));
+    }
+
+    /**
+        save vector to file
+        Param:
+            filename =  file name
+            separator = number separator
+    */
+    auto save(string filename, char separator = ';')
+    {
+        auto f = File(filename, "w");
+        f.writeln(line_from_array(this.m_data, separator));
+        // f exits scope, reference count falls to zero,
+        // underlying $(D FILE*) is closed.
     }
 
     /// construct new vector of size filled with 0
@@ -69,7 +88,7 @@ class vector(T)
             _a =     min
             _b =     max
     */
-    auto randomize(T _a = T.min, T _b = T.max)
+    auto randomize(T _a, T _b)
     {
         //debug(v) writefln("min %d max %d", T.min, T.max);
         assert(_a < _b);
@@ -78,27 +97,37 @@ class vector(T)
         return this;
     }
 
-    static auto array_from_line(ref string line)
+    static auto array_from_line(ref string line, char separator)
     {
         T[] new_data;
         string buf;
         debug(v) writeln("line: ",line);
         foreach(i; 0.. line.length)
         {
-            switch(line[i])
+            if (line[i] == separator)
             {
-                case ';':
-                    //line[i] = ' ';
                     new_data ~= to!T(buf);
                     buf.length = 0;
-                    break;
-                default:
+            } else
+            {
                     buf ~= line[i];
             }
         }
         new_data ~= to!T(buf);
         debug(v) writeln("parsed array ", new_data);
         return new_data;
+    }
+
+    static auto line_from_array(ref T[] array, char separator)
+    {
+        string ret;
+        size_t i = 0;
+        auto app = (T x) {
+            ret ~= text(x);
+            if (++i != array.length) ret ~= separator;
+        };
+        array.each!(a => app(a));
+        return ret;
     }
 
     /// cast to array returns inner array

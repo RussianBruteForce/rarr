@@ -52,15 +52,34 @@ class matrix(T)
     /// construct new matrix through calling class as a function
     static auto opCall(M)(M[][] data) { return new matrix!M(data); }
 
-    /// construct new matrix from file filename
-    static auto opCall(string filename)
+    /**
+        construct new matrix from file
+        Param:
+            filename =  file name
+            separator = number separator
+    */
+    static auto opCall(string filename, char separator = ';')
     {
         assert(exists(filename));
         T[][] new_data;
         string[] lines = splitLines(readText(filename));
-        lines.each!((ref string a) => new_data ~= vector!T.array_from_line(a));
+        lines.each!((ref string a) => new_data ~= vector!T.array_from_line(a, separator));
 
         return new matrix!T(new_data);
+    }
+
+    /**
+        save matrix to file
+        Param:
+            filename =  file name
+            separator = number separator
+    */
+    auto save(string filename, char separator = ';')
+    {
+        auto f = File(filename, "w");
+        this.m_data.each!((ref a) => f.writeln(vector!T.line_from_array(a, separator)));
+        // f exits scope, reference count falls to zero,
+        // underlying $(D FILE*) is closed.
     }
 
     /// construct new matrix of size filled with 0
@@ -76,7 +95,7 @@ class matrix(T)
             _a =     min
             _b =     max
     */
-    auto randomize(T _a = T.min, T _b = T.max)
+    auto randomize(T _a, T _b)
     {
         assert(_a < _b);
         auto gen = Random(unpredictableSeed);

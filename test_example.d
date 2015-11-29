@@ -41,8 +41,16 @@ int main(string[] args)
 
 
     auto vr1 = vector!int(5);
-    writeln(cast(int[])(vr1.randomize()));
-    auto mr1 = matrix!int(5);
-    writeln(cast(int[][])(mr1.randomize()));
+    writeln(cast(int[])(vr1.randomize(int.min, int.max)));
+    auto mr1 = matrix!int(10);
+    writeln(cast(int[][])(mr1.randomize(-10, 10)));
+
+    auto vf = vector!int([666,666,666]);
+    vf.save("kekv");
+    mr1.save("kekm");
+    auto mf = matrix!float("kekm");
+    mf.save("kekmf");
+    mr1 = matrix!int("kekmf");
+    mf.save("kekm_");
 	return 0;
 }
