@@ -101,8 +101,6 @@ class vector(T)
         return new_data;
     }
 
-
-
     /// cast to array returns inner array
     auto opCast(type)() if (typeid(type) == typeid(T[])) { return this.m_data; }
 

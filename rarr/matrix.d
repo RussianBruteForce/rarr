@@ -19,12 +19,15 @@ debug(m) import std.stdio;
 
 class matrix(T)
 {
+    ///getter and setter for length of inner arrays
     @property size_t size() { return m_data.length; }
+    /// ditto
     @property size_t size(size_t size) {
         this.m_data.length = size;
         this.m_data.each!((ref a) => a.length = size);
         return this.m_data.length;
     }
+    /// pointer to inner array
     @property T[][] data() {return this.m_data;};
 
     alias type = T;
@@ -37,6 +40,7 @@ class matrix(T)
         cubic
     };
 
+    /// construct matrix from data
     this (T[][] data)
     {
         foreach (i; 0 .. data.length)
@@ -45,6 +49,7 @@ class matrix(T)
         debug(m) writeln("constr ", this.m_data);
     }
 
+    /// construct new matrix through calling class as a function
     static auto opCall(M)(M[][] data) { return new matrix!M(data); }
 
     /// construct new matrix from file filename
@@ -80,6 +85,7 @@ class matrix(T)
         return this;
     }
 
+    /// returns $(I NEW) transposed matrix
     auto t()
     {
         T[][] new_data;
@@ -95,6 +101,7 @@ class matrix(T)
         return new matrix!T(new_data);
     }
 
+    /// cast to T[][] returns inner array
     auto opCast(type)() if (typeid(type) == typeid(T[][])) { return this.m_data; }
 
     /// returns norm of type type
@@ -113,8 +120,11 @@ class matrix(T)
         }
     }
 
+    /**
+        getter and setter through index
+    */
     auto opIndex(size_t row, size_t col) { return m_data[row][col]; }
-
+    /// ditto
     auto opIndexAssign(T value, size_t row, size_t col) { return m_data[row][col] = value; }
 
 //    auto addRow(T[] row)
@@ -124,6 +134,7 @@ class matrix(T)
 //        return this;
 //    }
 
+    /// apply op on each matrix element
     auto opBinary(string op)(T rhs) //if(op == "*" || op == "+")
     {
         T[][] new_data;
@@ -140,6 +151,7 @@ class matrix(T)
         return new matrix!T(new_data);
     }
 
+    /// add and subs ops between matrix of same size
     auto opBinary(string op)(matrix rhs) if (op == "+" || op == "-")
     {
         assert(this.size == rhs.size);
@@ -157,6 +169,7 @@ class matrix(T)
         return new matrix!T(new_data);
     }
 
+    /// multiplication of same size matrix
     auto opBinary(string op)(matrix rhs) if (op == "*")
     {
         assert(this.size == rhs.size);
@@ -177,6 +190,7 @@ class matrix(T)
         return new matrix!T(new_data);
     }
 
+    /// multiplication on vector of same size
     auto opBinary(string op)(vector!T rhs) if (op == "*")
     {
         assert(this.size == rhs.size);
@@ -194,6 +208,7 @@ class matrix(T)
         return new vector!T(new_data);
     }
 
+    /// assign op aplly on each element
     auto opOpAssign(string op)(T rhs) //if(op == "*" || op == "+" || op == "/")
     {
         foreach(i; 0 .. this.size)
@@ -207,6 +222,7 @@ class matrix(T)
         return this;
     }
 
+    /// ditto
     auto opOpAssign(string op)(matrix rhs) if (op == "+" || op == "-")
     {
         assert(this.size == rhs.size);
@@ -221,6 +237,8 @@ class matrix(T)
         return this;
     }
 
+
+    /// assign multiplication
     auto opOpAssign(string op)(matrix rhs) if (op == "*")
     {
         assert(this.size == rhs.size);
