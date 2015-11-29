@@ -54,9 +54,22 @@ class for math <u>vector</u> representation<br><br>
 <dd>construct new vector through calling class as a function<br><br>
 
 </dd>
-<dt><big><a name="vector.opCall.2"></a>static auto <u>opCall</u>(string <i>filename</i>);
+<dt><big><a name="vector.opCall.2"></a>static auto <u>opCall</u>(string <i>filename</i>, char <i>separator</i> = ';');
 </big></dt>
-<dd>construct new vector from file <i>filename</i><br><br>
+<dd>construct new vector from file
+<br><br>
+<b>Param:</b><br>
+<i>filename</i> =  file name
+            <i>separator</i> = number <i>separator</i><br><br>
+
+</dd>
+<dt><big><a name="vector.save"></a>auto <u>save</u>(string <i>filename</i>, char <i>separator</i> = ';');
+</big></dt>
+<dd><u>save</u> vector to file
+<br><br>
+<b>Param:</b><br>
+<i>filename</i> =  file name
+            <i>separator</i> = number <i>separator</i><br><br>
 
 </dd>
 <dt><big><a name="vector.opCall.3"></a>static auto <u>opCall</u>(size_t <i>size</i>);
@@ -64,7 +77,7 @@ class for math <u>vector</u> representation<br><br>
 <dd>construct new vector of <i>size</i> filled with 0<br><br>
 
 </dd>
-<dt><big><a name="vector.randomize"></a>auto <u>randomize</u>(T <i>_a</i> = T.min, T <i>_b</i> = T.max);
+<dt><big><a name="vector.randomize"></a>auto <u>randomize</u>(T <i>_a</i>, T <i>_b</i>);
 </big></dt>
 <dd>fill vector with random data
 <br><br>

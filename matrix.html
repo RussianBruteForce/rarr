@@ -10,7 +10,18 @@
 <dd><b>matrix:</b><br>
 class for math square <u>matrix</u> representation<br><br>
 
-<dl><dt><big><a name="matrix.norm_t"></a>enum <u>norm_t</u>;
+<dl><dt><big><a name="matrix.size"></a>@property size_t <u>size</u>();
+<br>@property size_t <u>size</u>(size_t <u>size</u>);
+</big></dt>
+<dd>getter and setter for length of inner arrays<br><br>
+
+</dd>
+<dt><big><a name="matrix.data"></a>@property T[][] <u>data</u>();
+</big></dt>
+<dd>pointer to inner array<br><br>
+
+</dd>
+<dt><big><a name="matrix.norm_t"></a>enum <u>norm_t</u>;
 </big></dt>
 <dd>norm types<br><br>
 
@@ -34,9 +45,22 @@ class for math square <u>matrix</u> representation<br><br>
 <dd>construct new matrix through calling class as a function<br><br>
 
 </dd>
-<dt><big><a name="matrix.opCall.2"></a>static auto <u>opCall</u>(string <i>filename</i>);
+<dt><big><a name="matrix.opCall.2"></a>static auto <u>opCall</u>(string <i>filename</i>, char <i>separator</i> = ';');
 </big></dt>
-<dd>construct new matrix from file <i>filename</i><br><br>
+<dd>construct new matrix from file
+<br><br>
+<b>Param:</b><br>
+<i>filename</i> =  file name
+            <i>separator</i> = number <i>separator</i><br><br>
+
+</dd>
+<dt><big><a name="matrix.save"></a>auto <u>save</u>(string <i>filename</i>, char <i>separator</i> = ';');
+</big></dt>
+<dd><u>save</u> matrix to file
+<br><br>
+<b>Param:</b><br>
+<i>filename</i> =  file name
+            <i>separator</i> = number <i>separator</i><br><br>
 
 </dd>
 <dt><big><a name="matrix.opCall.3"></a>static auto <u>opCall</u>(size_t <i>size</i>);
@@ -44,7 +68,7 @@ class for math square <u>matrix</u> representation<br><br>
 <dd>construct new matrix of <i>size</i> filled with 0<br><br>
 
 </dd>
-<dt><big><a name="matrix.randomize"></a>auto <u>randomize</u>(T <i>_a</i> = T.min, T <i>_b</i> = T.max);
+<dt><big><a name="matrix.randomize"></a>auto <u>randomize</u>(T <i>_a</i>, T <i>_b</i>);
 </big></dt>
 <dd>fill matrix with random data
 <br><br>
