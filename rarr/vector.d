@@ -136,7 +136,7 @@ class vector(T)
     /// returns norm of type type
     auto norm(norm_t type)
     {
-        switch(type)
+        final switch(type)
         {
         case norm_t.sphere:
             return norm_sphere();
@@ -147,8 +147,6 @@ class vector(T)
         case norm_t.cubic:
             return norm_cubic();
             break;
-        default:
-            assert(0);
         }
     }
 

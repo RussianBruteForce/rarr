@@ -126,7 +126,7 @@ class matrix(T)
     /// returns norm of type type
     auto norm(norm_t type)
     {
-        switch(type)
+        final switch(type)
         {
         case norm_t.octo:
             return norm_octo();
@@ -134,8 +134,6 @@ class matrix(T)
         case norm_t.cubic:
             return norm_cubic();
             break;
-        default:
-            assert(0);
         }
     }
 
