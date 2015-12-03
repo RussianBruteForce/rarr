@@ -31,8 +31,8 @@ int main(string[] args)
 
 
     auto mn = matrix!int([[1,2],[3,4]]);
-    writeln(mn.norm(mn.norm_t.cubic));
-    writeln(mn.norm(mn.norm_t.octo));
+    writeln("norm ", mn.norm(mn.norm_t.cubic));
+    writeln("norm ", mn.norm(mn.norm_t.octo));
     auto vm = mn*vector!int([5,6]);
     writeln(cast(int[])(vm));
 
