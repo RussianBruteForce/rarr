@@ -215,6 +215,7 @@ class matrix(T)
         new_data.length = this.size;
         foreach(i; 0 .. this.size)
         {
+            new_data[i] = 0;
             foreach(j; 0 .. this.size)
             {
                 new_data[i] += rhs.data[j] * this.m_data[i][j];
@@ -261,6 +262,12 @@ class matrix(T)
         assert(this.size == rhs.size);
         debug(m) writeln("matrix " ~op~ "= matrix");
         return this.m_data = (this * rhs).data;
+    }
+
+    /// returns copy of data
+    auto copy() const
+    {
+        return this.m_data;
     }
 
 private:

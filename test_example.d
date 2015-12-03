@@ -30,7 +30,7 @@ int main(string[] args)
     writeln(cast(int[])(vn));
 
 
-    auto mn = matrix!int([[1,2],[3,4]]);
+    auto mn = matrix!float([[1,2],[3,4]]);
     writeln("norm ", mn.norm(mn.norm_t.cubic));
     writeln("norm ", mn.norm(mn.norm_t.octo));
     auto vm = mn*vector!int([5,6]);
@@ -52,5 +52,15 @@ int main(string[] args)
     mf.save("kekmf");
     mr1 = matrix!int("kekmf");
     mf.save("kekm_");
-	return 0;
+
+    auto gauss_m = new matrix!float([[2,1,-1],[-3,-1,2],[-2,1,2]]);
+    auto gauss_b = new vector!float([8,-11,3]);
+writeln("data ", gauss_m.data);
+    auto x = solve.gaussian(gauss_m, gauss_b);
+
+writeln("data ", gauss_m.data);
+writeln("gauss", x.data);
+auto b = gauss_m * x;
+writeln("check", b.data);
+    return 0;
 }
