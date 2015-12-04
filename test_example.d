@@ -53,14 +53,24 @@ int main(string[] args)
     mr1 = matrix!int("kekmf");
     mf.save("kekm_");
 
-    auto gauss_m = new matrix!float([[2,1,-1],[-3,-1,2],[-2,1,2]]);
-    auto gauss_b = new vector!float([8,-11,3]);
-writeln("data ", gauss_m.data);
-    auto x = solve.gaussian(gauss_m, gauss_b);
+    const auto gauss_m = new matrix!float([[2,1,-1],[-3,-1,2],[-2,1,2]]);
+    const auto gauss_b = new vector!float([8,-11,3]);
+    writeln("data A", gauss_m.cdata);
+    writeln("data b", gauss_b.cdata);
+    auto x1 = solve.gaussian(gauss_m, gauss_b);
+auto multv = x1*x1;
+    writeln("gauss x", x1.data);
+    auto b1 = gauss_m * x1;
+    writeln("gauss _b_", b1.data);
+    writeln("residual is ", solve.residual(gauss_m, x1, gauss_b));
 
-writeln("data ", gauss_m.data);
-writeln("gauss", x.data);
-auto b = gauss_m * x;
-writeln("check", b.data);
+    writeln("data A ", gauss_m.cdata);
+    writeln("data b ", gauss_b.cdata);
+    auto x2 = solve.seidel(gauss_m, gauss_b, 12);
+    writeln("seidel x", x2.data);
+    auto b2 = gauss_m * x2;
+    writeln("seidel _b_", b2.data);
+    writeln("residual is ", solve.residual(gauss_m, x2, gauss_b));
+
     return 0;
 }
