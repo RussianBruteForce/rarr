@@ -15,9 +15,23 @@ class for solving matrix<br><br>
 <dd>classic Gauss method<br><br>
 
 </dd>
-<dt><big><a name="solve.seidel"></a>auto <u>seidel</u>(T)(auto ref const matrix!T <i>A</i>, ref const vector!T <i>b</i>, const T <i>eps</i>);
+<dt><big><a name="solve.seidel"></a>auto <u>seidel</u>(T)(ref const matrix!T <i>A</i>, ref const vector!T <i>b</i>, const T <i>eps</i>);
 </big></dt>
 <dd>Seidel method<br><br>
+
+</dd>
+<dt><big><a name="solve.residual"></a>auto <u>residual</u>(T)(ref const matrix!T <i>A</i>, ref const vector!T <i>x</i>, ref const vector!T <i>b</i>);
+</big></dt>
+<dd><u>residual</u> of solution
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>matrix!T <i>A</i></td>
+<td>matrix</td></tr>
+<tr><td>vector!T <i>x</i></td>
+<td>solution</td></tr>
+<tr><td>vector!T <i>b</i></td>
+<td>condition</td></tr>
+</table><br>
 
 </dd>
 </dl>
