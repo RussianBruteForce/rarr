@@ -5,12 +5,11 @@ import std.file;
 import std.string;
 import std.conv;
 import std.random;
+import std.stdio;
 
 import rarr.vector;
 
-debug = m;
-
-debug(m) import std.stdio;
+//debug = m;
 
 
 /++
@@ -216,7 +215,7 @@ class matrix(T)
     }
 
     /// multiplication on vector of same size
-    auto opBinary(string op)(vector!T rhs) const if (op == "*")
+    auto opBinary(string op)(const vector!T rhs) const if (op == "*")
     {
         assert(this.size == rhs.size);
         T[] new_data;
@@ -226,8 +225,8 @@ class matrix(T)
             new_data[i] = 0;
             foreach(j; 0 .. this.size)
             {
-                new_data[i] += rhs.data[j] * this.m_data[i][j];
-                writeln(new_data[i]);
+                new_data[i] += rhs.cdata[j] * this.m_data[i][j];
+                debug(m) writeln(new_data[i]);
             }
         }
         debug(m) writeln("matrix " ~op~ " vector");

@@ -6,9 +6,10 @@ import std.file;
 import std.string;
 import std.conv;
 import std.random;
+import std.stdio;
+import std.numeric;
 
-debug = v;
-debug(v) import std.stdio;
+//debug = v;
 
 /++
     vector: class for math vector representation
@@ -54,7 +55,7 @@ class vector(T)
             filename =  file name
             separator = number separator
     */
-    static auto opCall(string filename, char separator = ';')
+    static auto opCall(const string filename, const char separator = ';')
     {
         assert(exists(filename));
         string[] lines = splitLines(readText(filename));
@@ -71,7 +72,7 @@ class vector(T)
         TODO:
             make this shit const
     */
-    auto save(string filename, char separator = ';')
+    auto save(const string filename, const char separator = ';')
     {
         auto f = File(filename, "w");
         f.writeln(line_from_array(this.m_data, separator));
@@ -80,7 +81,7 @@ class vector(T)
     }
 
     /// construct new vector of size filled with 0
-    static auto opCall(size_t size) {
+    static auto opCall(const size_t size) {
         auto v = new vector!T([0]);
         v.size = size;
         return v;
@@ -92,7 +93,7 @@ class vector(T)
             _a =     min
             _b =     max
     */
-    auto randomize(T _a, T _b)
+    auto randomize(const T _a, const T _b)
     {
         //debug(v) writefln("min %d max %d", T.min, T.max);
         assert(_a < _b);
@@ -101,7 +102,7 @@ class vector(T)
         return this;
     }
 
-    static auto array_from_line(const ref string line, char separator)
+    static auto array_from_line(const ref string line, const char separator)
     {
         T[] new_data;
         string buf;
@@ -122,7 +123,7 @@ class vector(T)
         return new_data;
     }
 
-    static auto line_from_array(const ref T[] array, char separator)
+    static auto line_from_array(const ref T[] array, const char separator)
     {
         string ret;
         size_t i = 0;
@@ -157,14 +158,14 @@ class vector(T)
     /// getter and setter through the index i
     auto opIndex(size_t i) const { return m_data[i]; }
     /// ditto
-    auto opIndexAssign(T value, size_t i) { return m_data[i] = value; }
+    auto opIndexAssign(const T value, const size_t i) { return m_data[i] = value; }
 
     //auto add(T value) { return this.m_data ~= value; }
 
     //auto add(T[] data) { return this.m_data ~= data; }
 
     /// apply op on each element of inner array
-    auto opBinary(string op)(T rhs) const //if (op == "*" || op == "+")
+    auto opBinary(string op)(const T rhs) const //if (op == "*" || op == "+")
     {
         T[] new_data;
         foreach(i; 0 .. new_data.length)
@@ -176,34 +177,34 @@ class vector(T)
     }
 
     /// multiplication of arrays with same size
-    auto opBinary(string op)(vector rhs) const if (op == "*")
+    auto opBinary(string op)(const vector!T rhs) const if (op == "*")
     {
         assert(this.size == rhs.size);
         T ret = 0;
         foreach(i; 0 .. this.size)
         {
-            ret += this.m_data[i] * p(rhs)[i];
+            ret += this.m_data[i] * rhs.cdata[i];
         }
         return ret;
     }
 
     /// addition and substraction of vectors with same size
-    auto opBinary(string op)(vector rhs) const if (op == "+" || op == "-")
+    auto opBinary(string op)(const vector!T rhs) const if (op == "+" || op == "-")
     {
         assert(this.size == rhs.size);
         T[] new_data;
         new_data.length = this.size;
         foreach(i; 0 .. this.size)
         {
-            mixin("new_data[i] = this.m_data[i]" ~op~ "rhs.data[i];");
+            mixin("new_data[i] = this.m_data[i]" ~op~ "rhs.cdata[i];");
         }
         return new vector!T(new_data);
     }
 
     /// assign operations op sended to inner array
-    auto opOpAssign(string op)(T rhs) { mixin("return this.m_data" ~op~ "=rhs;"); }
-    auto opOpAssign(string op)(T[] rhs) { mixin("return this.m_data" ~op~ "=rhs;"); } /// ditto
-    auto opOpAssign(string op)(vector rhs) { mixin("return this.m_data" ~op~ "=rhs.data;"); } /// ditto
+    auto opOpAssign(string op)(const T rhs) { mixin("return this.m_data" ~op~ "=rhs;"); }
+    auto opOpAssign(string op)(const T[] rhs) { mixin("return this.m_data" ~op~ "=rhs;"); } /// ditto
+    auto opOpAssign(string op)(const vector!T rhs) { mixin("return this.m_data" ~op~ "=rhs.cdata;"); } /// ditto
 
 private:
     T[] m_data;
