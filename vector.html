@@ -10,7 +10,7 @@
 <dd><b>vector:</b><br>
 class for math <u>vector</u> representation<br><br>
 
-<dl><dt><big><a name="vector.size"></a>@property size_t <u>size</u>();
+<dl><dt><big><a name="vector.size"></a>const @property size_t <u>size</u>();
 <br>@property size_t <u>size</u>(size_t <i>l</i>);
 </big></dt>
 <dd>getter and setter for length of inner array<br><br>
@@ -19,6 +19,11 @@ class for math <u>vector</u> representation<br><br>
 <dt><big><a name="vector.data"></a>@property T[] <u>data</u>();
 </big></dt>
 <dd>pointer to inner array<br><br>
+
+</dd>
+<dt><big><a name="vector.cdata"></a>const @property auto <u>cdata</u>();
+</big></dt>
+<dd>dito<br><br>
 
 </dd>
 <dt><big><a name="vector.type"></a>alias <u>type</u> = T;
@@ -54,7 +59,7 @@ class for math <u>vector</u> representation<br><br>
 <dd>construct new vector through calling class as a function<br><br>
 
 </dd>
-<dt><big><a name="vector.opCall.2"></a>static auto <u>opCall</u>(string <i>filename</i>, char <i>separator</i> = ';');
+<dt><big><a name="vector.opCall.2"></a>static auto <u>opCall</u>(const string <i>filename</i>, const char <i>separator</i> = ';');
 </big></dt>
 <dd>construct new vector from file
 <br><br>
@@ -63,21 +68,24 @@ class for math <u>vector</u> representation<br><br>
             <i>separator</i> = number <i>separator</i><br><br>
 
 </dd>
-<dt><big><a name="vector.save"></a>auto <u>save</u>(string <i>filename</i>, char <i>separator</i> = ';');
+<dt><big><a name="vector.save"></a>auto <u>save</u>(const string <i>filename</i>, const char <i>separator</i> = ';');
 </big></dt>
 <dd><u>save</u> vector to file
 <br><br>
 <b>Param:</b><br>
 <i>filename</i> =  file name
-            <i>separator</i> = number <i>separator</i><br><br>
+            <i>separator</i> = number <i>separator</i>
+<br><br>
+<b>TODO:</b><br>
+make this shit const<br><br>
 
 </dd>
-<dt><big><a name="vector.opCall.3"></a>static auto <u>opCall</u>(size_t <i>size</i>);
+<dt><big><a name="vector.opCall.3"></a>static auto <u>opCall</u>(const size_t <i>size</i>);
 </big></dt>
 <dd>construct new vector of <i>size</i> filled with 0<br><br>
 
 </dd>
-<dt><big><a name="vector.randomize"></a>auto <u>randomize</u>(T <i>_a</i>, T <i>_b</i>);
+<dt><big><a name="vector.randomize"></a>auto <u>randomize</u>(const T <i>_a</i>, const T <i>_b</i>);
 </big></dt>
 <dd>fill vector with random data
 <br><br>
@@ -94,35 +102,35 @@ class for math <u>vector</u> representation<br><br>
 <dd>cast to array returns inner array<br><br>
 
 </dd>
-<dt><big><a name="vector.norm"></a>auto <u>norm</u>(norm_t <i>type</i>);
+<dt><big><a name="vector.norm"></a>const auto <u>norm</u>(norm_t <i>type</i>);
 </big></dt>
 <dd>returns <u>norm</u> of <i>type</i> <i>type</i><br><br>
 
 </dd>
-<dt><big><a name="vector.opIndex"></a>auto <u>opIndex</u>(size_t <i>i</i>);
-<br><a name="vector.opIndexAssign"></a>auto <u>opIndexAssign</u>(T <i>value</i>, size_t <i>i</i>);
+<dt><big><a name="vector.opIndex"></a>const auto <u>opIndex</u>(size_t <i>i</i>);
+<br><a name="vector.opIndexAssign"></a>auto <u>opIndexAssign</u>(const T <i>value</i>, const size_t <i>i</i>);
 </big></dt>
 <dd>getter and setter through the index <i>i</i><br><br>
 
 </dd>
-<dt><big><a name="vector.opBinary"></a>auto <u>opBinary</u>(string op)(T <i>rhs</i>);
+<dt><big><a name="vector.opBinary"></a>const auto <u>opBinary</u>(string op)(const T <i>rhs</i>);
 </big></dt>
 <dd>apply op on each element of inner array<br><br>
 
 </dd>
-<dt><big><a name="vector.opBinary.2"></a>auto <u>opBinary</u>(string op)(vector <i>rhs</i>) if (op == "*");
+<dt><big><a name="vector.opBinary.2"></a>const auto <u>opBinary</u>(string op)(const vector!T <i>rhs</i>) if (op == "*");
 </big></dt>
 <dd>multiplication of arrays with same size<br><br>
 
 </dd>
-<dt><big><a name="vector.opBinary.3"></a>auto <u>opBinary</u>(string op)(vector <i>rhs</i>) if (op == "+" || op == "-");
+<dt><big><a name="vector.opBinary.3"></a>const auto <u>opBinary</u>(string op)(const vector!T <i>rhs</i>) if (op == "+" || op == "-");
 </big></dt>
 <dd>addition and substraction of vectors with same size<br><br>
 
 </dd>
-<dt><big><a name="vector.opOpAssign"></a>auto <u>opOpAssign</u>(string op)(T <i>rhs</i>);
-<br>auto <u>opOpAssign</u>(string op)(T[] <i>rhs</i>);
-<br>auto <u>opOpAssign</u>(string op)(vector <i>rhs</i>);
+<dt><big><a name="vector.opOpAssign"></a>auto <u>opOpAssign</u>(string op)(const T <i>rhs</i>);
+<br>auto <u>opOpAssign</u>(string op)(const T[] <i>rhs</i>);
+<br>auto <u>opOpAssign</u>(string op)(const vector!T <i>rhs</i>);
 </big></dt>
 <dd>assign operations op sended to inner array<br><br>
 
