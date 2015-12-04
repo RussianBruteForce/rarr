@@ -20,15 +20,17 @@ debug(m) import std.stdio;
 class matrix(T)
 {
     ///getter and setter for length of inner arrays
-    @property size_t size() { return m_data.length; }
+    @property size_t size() const { return m_data.length; }
     /// ditto
-    @property size_t size(size_t size) {
+    @property size_t size(const size_t size) {
         this.m_data.length = size;
         this.m_data.each!((ref a) => a.length = size);
         return this.m_data.length;
     }
     /// pointer to inner array
     @property T[][] data() {return this.m_data;};
+    /// dito
+    @property auto cdata() const {return to!(const T[][])(this.m_data);};
 
     alias type = T;
 
@@ -73,11 +75,17 @@ class matrix(T)
         Param:
             filename =  file name
             separator = number separator
+        TODO:
+            make this shit const
     */
     auto save(string filename, char separator = ';')
     {
         auto f = File(filename, "w");
-        this.m_data.each!((ref a) => f.writeln(vector!T.line_from_array(a, separator)));
+        auto writer(T)(ref T[] arr)
+        {
+            f.writeln(vector!T.line_from_array(arr, separator));
+        };
+        this.m_data.each!((ref a) => writer(a));
         // f exits scope, reference count falls to zero,
         // underlying $(D FILE*) is closed.
     }
@@ -105,7 +113,7 @@ class matrix(T)
     }
 
     /// returns $(I NEW) transposed matrix
-    auto t()
+    auto t() const
     {
         T[][] new_data;
         new_data.length = this.size;
@@ -124,7 +132,7 @@ class matrix(T)
     auto opCast(type)() if (typeid(type) == typeid(T[][])) { return this.m_data; }
 
     /// returns norm of type type
-    auto norm(norm_t type)
+    auto norm(norm_t type) const
     {
         final switch(type)
         {
@@ -140,9 +148,9 @@ class matrix(T)
     /**
         getter and setter through index
     */
-    auto opIndex(size_t row, size_t col) { return m_data[row][col]; }
+    auto opIndex(const size_t row, const size_t col) const { return m_data[row][col]; }
     /// ditto
-    auto opIndexAssign(T value, size_t row, size_t col) { return m_data[row][col] = value; }
+    auto opIndexAssign(T value, const size_t row, const size_t col) { return m_data[row][col] = value; }
 
 //    auto addRow(T[] row)
 //    {
@@ -152,7 +160,7 @@ class matrix(T)
 //    }
 
     /// apply op on each matrix element
-    auto opBinary(string op)(T rhs) //if(op == "*" || op == "+")
+    auto opBinary(string op)(T rhs) const //if(op == "*" || op == "+")
     {
         T[][] new_data;
         new_data.length = this.size;
@@ -169,7 +177,7 @@ class matrix(T)
     }
 
     /// add and subs ops between matrix of same size
-    auto opBinary(string op)(matrix rhs) if (op == "+" || op == "-")
+    auto opBinary(string op)(matrix rhs) const if (op == "+" || op == "-")
     {
         assert(this.size == rhs.size);
         T[][] new_data;
@@ -187,7 +195,7 @@ class matrix(T)
     }
 
     /// multiplication of same size matrix
-    auto opBinary(string op)(matrix rhs) if (op == "*")
+    auto opBinary(string op)(matrix rhs) const if (op == "*")
     {
         assert(this.size == rhs.size);
         T[][] new_data;
@@ -208,7 +216,7 @@ class matrix(T)
     }
 
     /// multiplication on vector of same size
-    auto opBinary(string op)(vector!T rhs) if (op == "*")
+    auto opBinary(string op)(vector!T rhs) const if (op == "*")
     {
         assert(this.size == rhs.size);
         T[] new_data;
@@ -264,25 +272,19 @@ class matrix(T)
         return this.m_data = (this * rhs).data;
     }
 
-    /// returns copy of data
-    auto copy() const
-    {
-        return this.m_data;
-    }
-
 private:
     T[][] m_data;
 
     //static p(M)(M m) { return cast(T[][])m; }
 
-    auto v_abs(ref T[] arr)
+    static auto v_abs(const ref T[] arr)
     {
         T tmp = 0;
         arr.each!(a => tmp += abs(a));
         return tmp;
     }
 
-    auto norm_octo()
+    auto norm_octo() const
     {
         T tmp = 0;
         foreach(i; 0 .. this.size)
@@ -298,7 +300,7 @@ private:
         return tmp;
     }
 
-    auto norm_cubic()
+    auto norm_cubic() const
     {
         T tmp = v_abs(this.m_data[0]);
         this.m_data.each!((ref a) => (v_abs(a)>tmp)?(tmp=v_abs(a)):tmp);

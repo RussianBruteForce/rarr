@@ -17,11 +17,13 @@ debug(v) import std.stdio;
 class vector(T)
 {
     ///getter and setter for length of inner array
-    @property size_t size() { return this.m_data.length; }
+    @property size_t size() const { return this.m_data.length; }
     /// ditto
     @property size_t size(size_t l) { return this.m_data.length = l; }
     /// pointer to inner array
     @property T[] data() { return this.m_data; };
+    /// dito
+    @property auto cdata() const { return to!(const T[])(this.m_data); };
 
     /// stored data type
     alias type = T;
@@ -66,6 +68,8 @@ class vector(T)
         Param:
             filename =  file name
             separator = number separator
+        TODO:
+            make this shit const
     */
     auto save(string filename, char separator = ';')
     {
@@ -97,7 +101,7 @@ class vector(T)
         return this;
     }
 
-    static auto array_from_line(ref string line, char separator)
+    static auto array_from_line(const ref string line, char separator)
     {
         T[] new_data;
         string buf;
@@ -118,11 +122,11 @@ class vector(T)
         return new_data;
     }
 
-    static auto line_from_array(ref T[] array, char separator)
+    static auto line_from_array(const ref T[] array, char separator)
     {
         string ret;
         size_t i = 0;
-        auto app = (T x) {
+        auto app = (const T x) {
             ret ~= text(x);
             if (++i != array.length) ret ~= separator;
         };
@@ -134,7 +138,7 @@ class vector(T)
     auto opCast(type)() if (typeid(type) == typeid(T[])) { return this.m_data; }
 
     /// returns norm of type type
-    auto norm(norm_t type)
+    auto norm(norm_t type) const
     {
         final switch(type)
         {
@@ -151,7 +155,7 @@ class vector(T)
     }
 
     /// getter and setter through the index i
-    auto opIndex(size_t i) { return m_data[i]; }
+    auto opIndex(size_t i) const { return m_data[i]; }
     /// ditto
     auto opIndexAssign(T value, size_t i) { return m_data[i] = value; }
 
@@ -160,7 +164,7 @@ class vector(T)
     //auto add(T[] data) { return this.m_data ~= data; }
 
     /// apply op on each element of inner array
-    auto opBinary(string op)(T rhs) //if (op == "*" || op == "+")
+    auto opBinary(string op)(T rhs) const //if (op == "*" || op == "+")
     {
         T[] new_data;
         foreach(i; 0 .. new_data.length)
@@ -172,7 +176,7 @@ class vector(T)
     }
 
     /// multiplication of arrays with same size
-    auto opBinary(string op)(vector rhs) if (op == "*")
+    auto opBinary(string op)(vector rhs) const if (op == "*")
     {
         assert(this.size == rhs.size);
         T ret = 0;
@@ -184,7 +188,7 @@ class vector(T)
     }
 
     /// addition and substraction of vectors with same size
-    auto opBinary(string op)(vector rhs) if (op == "+" || op == "-")
+    auto opBinary(string op)(vector rhs) const if (op == "+" || op == "-")
     {
         assert(this.size == rhs.size);
         T[] new_data;
@@ -207,21 +211,21 @@ private:
     // replaced by vector.data property
     //static p(M)(M m) { return cast(T[])m; }
 
-    auto norm_sphere()
+    auto norm_sphere() const
     {
         T tmp = 0;
         this.m_data.each!(a => tmp += a * a);
         return round(sqrt(cast(real)tmp));
     }
 
-    auto norm_octo()
+    auto norm_octo() const
     {
         T tmp = 0;
         this.m_data.each!(a => tmp += abs(a));
         return tmp;
     }
 
-    auto norm_cubic()
+    auto norm_cubic() const
     {
         T tmp = this.m_data[0];
         this.m_data.each!(a => (a>tmp)?(tmp=a):tmp);

@@ -8,19 +8,19 @@ import std.algorithm.mutation;
 /// solve: class for solving matrix
 class solve
 {
-    static auto gaussian(T)(ref matrix!T M,ref vector!T b)
+    static auto gaussian(T)(const ref matrix!T M, const ref vector!T b)
     {
-        T[][] A;
-            A.length = b.size;
-        foreach(i; 0 .. b.size)
-        {
-            A[i].length = b.size;
-            foreach(j; 0 .. b.size)
-            {
-                A[i][j] = M.data[i][j];
-            }
-        }
-        T[] x = b.data.dup;
+        T[][] A = rarr.copy(M).data;
+        //A.length = b.size;
+        //foreach(i; 0 .. b.size)
+        //{
+        //    A[i].length = b.size;
+        //    foreach(j; 0 .. b.size)
+       //    {
+        //        A[i][j] = M.data[i][j];
+        //    }
+        //}
+        T[] x = rarr.copy(b).data;
 
         foreach(k; 0 .. A.length)
         {
@@ -50,7 +50,7 @@ class solve
     }
 
 private:
-    static find_max(T)(ref T[][] A, size_t k)
+    static find_max(T)(const ref T[][] A, size_t k)
     {
         size_t imax = k;
         T max_pivot = abs(A[k][k]);
