@@ -2,67 +2,108 @@ module solve;
 
 import rarr.matrix;
 import rarr.vector;
-import std.math : abs;
-import std.algorithm.mutation;
+import std.conv;
+import std.math;
+import std.algorithm;
+import std.range;
+//import std.typecons;
+import std.numeric;
+
+debug = s;
+debug(s) import std.stdio;
 
 /// solve: class for solving matrix
 class solve
 {
-    static auto gaussian(T)(const ref matrix!T M, const ref vector!T b)
+    /// classic Gauss method
+    static auto gaussian(T)(const ref matrix!T _A, const ref vector!T b)
+    in
     {
-        T[][] A = rarr.copy(M).data;
-        //A.length = b.size;
-        //foreach(i; 0 .. b.size)
-        //{
-        //    A[i].length = b.size;
-        //    foreach(j; 0 .. b.size)
-       //    {
-        //        A[i][j] = M.data[i][j];
-        //    }
-        //}
-        T[] x = rarr.copy(b).data;
+        assert(_A.size == b.size);
+    }
+    body
+    {
+        immutable n = _A.size;
+        enum eps = 1e-6;
 
-        foreach(k; 0 .. A.length)
+        auto A = _A.cdata.zip(b.cdata).map!(c => [] ~ c[0] ~ c[1]).array;
+        debug(s) writeln("A ", A);
+        debug(s) writeln(n, " ", A.length);
+
+        // Wikipedia algorithm from Gaussian elimination page,
+        // produces row-eschelon form.
+        foreach (k; 0 .. A.length)
         {
-            size_t imax = find_max(A, k);
-            assert(A[imax][k] != 0);
-            swap(A[k], A[imax]);
-            swap(x[k], x[imax]);
-            if (k+1 == A.length)
-                break;
-            for(auto i = k+1; i < A.length; i++)
-            {
-                double c = A[i][k]/A[k][k];
+            // Find pivot for column k and swap.
+            A[k .. n].minPos!((x, y) => x[k] > y[k]).front.swap(A[k]);
 
-                A[i][k] = 0;
-                for(auto j = k+1; j < A.length; j++)
-                {
-                    //write(j, "|", k);
-                    if (k >= A.length || j>= A.length || i >= A.length)
-                        break;
-                    A[i][j] -= c*A[k][j];
-                }
-                x[i] = c*x[k];
+            assert(A[k][k].abs > eps);
+
+            // Do for all rows below pivot.
+            foreach (i; k + 1 .. n)
+            {
+                // Do for all remaining elements in current row.
+                A[i][k+1 .. n+1] -= A[k][k+1 .. n+1] * (A[i][k] / A[k][k]);
+
+                A[i][k] = 0; // Fill lower triangular matrix with zeros.
             }
         }
 
+        auto x = new T[n];
+        foreach_reverse (immutable i; 0 .. n)
+        {
+            x[i] = (A[i][n] - A[i][i+1 .. n].dotProduct(x[i+1 .. n])) / A[i][i];
+        }
         return new vector!T(x);
     }
 
-private:
-    static find_max(T)(const ref T[][] A, size_t k)
+    /// Seidel method
+    static auto seidel(T)(auto const ref matrix!T A, const ref vector!T b, const T eps)
+    in
     {
-        size_t imax = k;
-        T max_pivot = abs(A[k][k]);
-        foreach(i; k+1 .. A.length)
+        assert(A.size == b.size);
+    }
+    body
+    {
+        immutable n = b.size;
+        T[] x; x.length = n;
+        x.each!((ref a) => a = 0);
+
+        while (true)
         {
-            T a = abs(A[i][k]);
-            if (a > max_pivot)
+            auto p = x.dup;
+            foreach(i; 0 .. n)
             {
-                max_pivot = a;
-                imax = i;
+                T buf = 0;
+                foreach(j; 0 .. i)
+                {
+                    buf += A.cdata[i][j] * x[j];
+                }
+                foreach(j; i+1 .. n)
+                {
+                    buf += A.cdata[i][j] * p[j];
+                }
+                x[i] = (b[i] - buf) / A.cdata[i][i];
             }
+            T ceps = 0;
+            foreach(i; 0 .. n) // spherical norm
+            {
+                ceps += (x[i]-p[i])*(x[i]-p[i]);
+            }
+            if (ceps <= eps) break;
         }
-        return imax;
+        return new vector!T(x);
+    }
+
+    static auto residual(T)(auto const ref matrix!T A, const ref vector!T x, const ref vector!T b)
+    in
+    {
+        assert((x.size + b.size)/2 == A.size);
+    }
+    body
+    {
+        auto _b_ = A*x;
+        auto d_b = _b_ - b;
+        return d_b.norm(d_b.norm_t.sphere);
     }
 }
