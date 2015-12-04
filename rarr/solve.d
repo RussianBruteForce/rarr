@@ -9,7 +9,7 @@ import std.range;
 //import std.typecons;
 import std.numeric;
 
-debug = s;
+//debug = s;
 debug(s) import std.stdio;
 
 /// solve: class for solving matrix
@@ -58,7 +58,7 @@ class solve
     }
 
     /// Seidel method
-    static auto seidel(T)(auto const ref matrix!T A, const ref vector!T b, const T eps)
+    static auto seidel(T)(const ref matrix!T A, const ref vector!T b, const T eps)
     in
     {
         assert(A.size == b.size);
@@ -95,7 +95,14 @@ class solve
         return new vector!T(x);
     }
 
-    static auto residual(T)(auto const ref matrix!T A, const ref vector!T x, const ref vector!T b)
+    /**
+        residual of solution
+        Params:
+            A = matrix
+            x = solution
+            b = condition
+    */
+    static auto residual(T)(const ref matrix!T A, const ref vector!T x, const ref vector!T b)
     in
     {
         assert((x.size + b.size)/2 == A.size);

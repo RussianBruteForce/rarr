@@ -28,6 +28,7 @@
 		</Build>
 		<Unit filename="rarr/matrix.d" />
 		<Unit filename="rarr/package.d" />
+		<Unit filename="rarr/solve.d" />
 		<Unit filename="rarr/vector.d" />
 		<Unit filename="test_example.d" />
 		<Extensions>
